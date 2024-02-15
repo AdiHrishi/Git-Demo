@@ -1,0 +1,1019 @@
+//Electricity pojoclass
+
+public class Electricity {
+	
+	private int customer_id;
+	private String  name;
+	private String email;
+	private String contact;
+	private String address;
+	private int is_admin;
+	private String password;
+	
+	
+	
+
+	public Electricity() {
+		super();
+	}
+	
+	
+
+
+	public Electricity(String name, String email, String contact, String address, String passowrd) {
+		super();
+		this.name = name;
+		this.email = email;
+		this.contact = contact;
+		this.address = address;
+		this.password=password;
+	}
+
+
+
+
+	public Electricity(int customer_id, String name, String email, String contact, String address, String password) {
+		super();
+		this.customer_id = customer_id;
+		this.name = name;
+		this.email = email;
+		this.contact = contact;
+		this.address = address;
+		this.password=password;
+	}
+
+
+
+
+	public Electricity(int customer_id, String name, String email, String contact, String address, String password, int is_admin) {
+		super();
+		this.customer_id = customer_id;
+		this.name = name;
+		this.email = email;
+		this.contact = contact;
+		this.address = address;
+		this.password=password;
+		this.is_admin = is_admin;
+	}
+	
+	
+	
+
+
+	
+
+
+
+
+	@Override
+	public String toString() {
+		return "Electricity [customer_id=" + customer_id + ", name=" + name + ", email=" + email + ", contact="
+				+ contact + ", address=" + address + ", is_admin=" + is_admin + ", password=" + password + "]";
+	}
+
+
+
+
+	public int getCustomer_id() {
+		return customer_id;
+	}
+
+
+	public void setCustomer_id(int customer_id) {
+		this.customer_id = customer_id;
+	}
+
+
+	public String getName() {
+		return name;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+	public String getEmail() {
+		return email;
+	}
+
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+
+	public String getContact() {
+		return contact;
+	}
+
+
+	public void setContact(String contact) {
+		this.contact = contact;
+	}
+
+
+	public String getAddress() {
+		return address;
+	}
+
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+
+	public int getIs_admin() {
+		return is_admin;
+	}
+
+
+	public void setIs_admin(int is_admin) {
+		this.is_admin = is_admin;
+	}
+	
+	
+
+
+	public String getPassword() {
+		return password;
+	}
+
+
+
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+
+
+
+	public static void main(String[] args) {
+	
+
+	}
+
+}
+
+
+
+//Reading Pojo class
+
+public class ReadingPojo {
+	private int customer_id;
+	private String meter_number;
+
+	public ReadingPojo(int customer_id, String meter_number) {
+		super();
+		this.customer_id = customer_id;
+		this.meter_number = meter_number;
+	}
+	
+
+	public ReadingPojo(String meter_number) {
+		super();
+		this.meter_number = meter_number;
+	}
+
+
+	public ReadingPojo() {
+		super();
+	}
+
+	
+
+	@Override
+	public String toString() {
+		return "ReadingPojo [customer_id=" + customer_id + ", meter_number=" + meter_number + "]";
+	}
+
+	
+	
+
+	public int getCustomer_id() {
+		return customer_id;
+	}
+
+
+	public void setCustomer_id(int customer_id) {
+		this.customer_id = customer_id;
+	}
+
+
+	public String getMeter_number() {
+		return meter_number;
+	}
+
+
+	public void setMeter_nmber(String meter_nmber) {
+		this.meter_number = meter_number;
+	}
+
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
+
+
+
+//interface dao ElectricitySteps 
+
+public interface Electricity_Steps {
+	
+	int add(Electricity obj);
+	
+	List<Electricity> getallElectricity();
+	
+	int delete(int customer_id);
+	
+	Electricity SelectById(int customer_id);
+	
+	int updateElectricity(Electricity obj);
+	
+	Electricity auth(String email,String password);
+	
+	List<Electricity> srch(String srchdata);
+	
+	int addReading(ReadingPojo obj);
+	
+	int deleteReading(int customer_id);
+	
+
+}
+
+
+//Model ElectricityBase class
+
+public class Electricity_Base implements Electricity_Steps{
+	static Electricity_Connections obj=new Electricity_Connections();
+	static Connection con= obj.connect();
+
+	public static void main(String[] args) {
+		
+
+	}
+
+	@Override
+	public int add(Electricity obj) {
+		String sql="insert into ebill(name,email,contact,address,password) values(?,?,?,?,?)";
+		int res=0;
+		try {
+		PreparedStatement ps= con.prepareStatement(sql);
+		ps.setString(1, obj.getName());
+		ps.setString(2, obj.getEmail());
+		ps.setString(3, obj.getContact());
+		ps.setString(4, obj.getAddress());
+		ps.setString(5, obj.getPassword());
+		res=ps.executeUpdate();
+		}catch (Exception e) {
+			System.out.println("invalid data");
+//			e.printStackTrace();
+		}
+		return res;
+	}
+
+	@Override
+	public List<Electricity> getallElectricity() {
+		String sql="select * from ebill";
+		ArrayList<Electricity> arr=new ArrayList<Electricity>();
+		try {
+			PreparedStatement ps= con.prepareStatement(sql);
+			ResultSet rs=ps.executeQuery();
+			while(rs.next()) {
+				int customer_id=rs.getInt("customer_id");
+				String name=rs.getString("name");
+				String email=rs.getString("email");
+				String contact=rs.getString("contact");
+				String address=rs.getString("address");
+				String password=rs.getString("password");
+				int is_admin=rs.getInt("is_admin");
+				Electricity obj=new Electricity(customer_id, name, email, contact, address, password, is_admin);	
+				arr.add(obj);
+			}
+			} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		return arr;
+	}
+
+	@Override
+	public int delete(int customer_id) {
+		String sql="delete from ebill where customer_id=?";
+		int res=0;
+		try {
+			PreparedStatement ps=con.prepareStatement(sql);
+			ps.setInt(1, customer_id);
+			res=ps.executeUpdate();
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		return res;
+	}
+
+	@Override
+	public Electricity SelectById(int customer_id) {
+		String sql="select * from ebill where customer_id=?";
+		Electricity obj=new Electricity();
+		try {
+			PreparedStatement ps= con.prepareStatement(sql);
+			ps.setInt(1, customer_id);
+			ResultSet rs=ps.executeQuery();
+			while(rs.next()) {
+				int uid=rs.getInt("customer_id");
+				String name=rs.getString("name");
+				String email=rs.getString("email");
+				String contact=rs.getString("contact");
+				String address=rs.getString("address");
+				String password=rs.getString("password");
+				obj.setCustomer_id(uid);
+				obj.setName(name);
+				obj.setEmail(email);
+				obj.setContact(contact);
+				obj.setAddress(address);
+				obj.setPassword(password);
+			}
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		return obj;
+	}
+
+
+	@Override
+	public int updateElectricity(Electricity obj) {
+		String sql="update ebill set name=?,email=?,contact=?,address=?,password=? where customer_id=?";
+		int res=0;
+		try {
+			PreparedStatement ps=con.prepareStatement(sql);
+			ps.setString(1, obj.getName());
+			ps.setString(2, obj.getEmail());
+			ps.setString(3, obj.getContact());
+			ps.setString(4, obj.getAddress());
+			ps.setString(5, obj.getPassword());
+			ps.setInt(6, obj.getCustomer_id());
+			res=ps.executeUpdate();
+			
+			} catch (SQLException e) {
+			System.out.println("Invalid Data");
+			e.printStackTrace();
+		}
+		return res;
+	}
+
+	@Override
+	public Electricity auth(String email, String password) {
+		String sql="select * from ebill where email=? and password=?";
+		Electricity obj=new Electricity();
+		try {
+			PreparedStatement ps=con.prepareStatement(sql);
+			ps.setString(1, email);
+			ps.setString(2, password);
+			ResultSet rs=ps.executeQuery();
+
+			while (rs.next()) {
+				obj.setCustomer_id(rs.getInt("customer_id"));
+				obj.setName(rs.getString("name"));
+				obj.setEmail(rs.getString("email"));
+				obj.setContact(rs.getString("contact"));
+				obj.setAddress(rs.getString("address"));
+				obj.setPassword(rs.getString("password"));
+				obj.setIs_admin(rs.getInt("is_admin"));
+				
+			}
+			return obj;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public List<Electricity> srch(String srchdata) {
+		String sql="select * from ebill where name like ?";
+		ArrayList<Electricity> arr=new ArrayList<Electricity>();
+		try {
+			PreparedStatement ps=con.prepareStatement(sql);
+			ps.setString(1, "%"+srchdata+"%");
+			ResultSet rs=ps.executeQuery();
+			while(rs.next()) {
+				int customer_id=rs.getInt("customer_id");
+				String name=rs.getString("name");
+				String email=rs.getString("email");
+				String contact=rs.getString("contact");
+				String address=rs.getString("address");
+				String password=rs.getString("password");
+				int is_admin=rs.getInt("is_admin");
+				Electricity obj=new Electricity(customer_id, name, email, contact, address, password, is_admin);
+				arr.add(obj);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return arr;
+	}
+
+	@Override
+	public int addReading(ReadingPojo obj) {
+		String sql="insert into reading(meter_number) values(?)";
+		int res=0;
+		try {
+		PreparedStatement ps= con.prepareStatement(sql);
+		ps.setString(1, obj.getMeter_number());
+		res=ps.executeUpdate();
+		}catch (Exception e) {
+			System.out.println("invalid data");
+		}
+		return res;
+	}
+
+	@Override
+	public int deleteReading(int customer_id) {
+		String sql="delete from reading where customer_id=?";
+		int res=0;
+		try {
+			PreparedStatement ps=con.prepareStatement(sql);
+			ps.setInt(1, customer_id);
+			res=ps.executeUpdate();
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		return res;
+	}
+
+
+}
+
+
+// Model Dbconnections
+
+public class Electricity_Connections 
+{
+	String url="jdbc:mysql://localhost:3307/electricity";
+	String name="root";
+	String password="";
+	
+	
+	public Connection connect() {
+		Connection con=null;
+		try {
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		try {
+			con=DriverManager.getConnection(url, name, password);
+		} catch (SQLException e) {
+			System.out.println("Connection problem");
+		}
+	}catch (ClassNotFoundException e) {
+		System.out.println("Driver not found");
+	}
+		return con;
+}
+
+	public static void main(String[] args) {
+		System.out.println("runn");
+	}
+
+}
+
+//Electricity Unit
+
+@WebServlet("/elec")
+public class ElectricityUnit extends HttpServlet {
+	static ElectricityBase db=new ElectricityBase();
+       
+  
+    
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String action=request.getParameter("action");
+		String customer_id=request.getParameter("customer_id");
+		if(action!=null) {
+			switch (action) {
+			case "form": {
+				RequestDispatcher rs=request.getRequestDispatcher("form.html");
+				rs.forward(request, response);
+				break;
+			}
+			case "getdata":{
+				List<Electricity> data= db.getallElectricity();
+				System.out.println(data);
+				request.setAttribute("stdata", data);
+				RequestDispatcher rd= request.getRequestDispatcher("List.jsp");
+				rd.forward(request, response);
+				break;
+			}
+			case "delete":{
+				if(customer_id!=null) {
+					int uid=Integer.parseInt(customer_id);
+					int res=db.delete(uid);
+					if(res>0) {
+						response.sendRedirect("elec?action=getdata");
+					}else {
+						request.setAttribute("msg", "Internal Server Error");
+						RequestDispatcher rd=request.getRequestDispatcher("error.jsp");
+						rd.forward(request, response);
+					}
+				}else {
+					request.setAttribute("msg", "Id nahi milra or Missing Id");
+					RequestDispatcher rd=request.getRequestDispatcher("error.jsp");
+					rd.forward(request, response);
+				}
+				break;
+			
+			}
+			case "edit":{
+				if(customer_id!=null)
+				{
+					int uid=Integer.parseInt(customer_id);
+					Electricity obj=db.SelectById(uid);
+					if(obj.getCustomer_id()!=0)
+					{
+						request.setAttribute("data", obj);
+						RequestDispatcher rs=request.getRequestDispatcher("editform.jsp");
+						rs.forward(request, response);
+						break;
+					}
+					else
+					{
+						request.setAttribute("msg", "No result found");
+						RequestDispatcher rd=request.getRequestDispatcher("error.jsp");
+						rd.forward(request, response);
+					}
+				}
+				else 
+				{
+					request.setAttribute("msg", "Invalid Id or Missing Id");
+					RequestDispatcher rd=request.getRequestDispatcher("error.jsp");
+					rd.forward(request, response);
+				}
+				break;
+			}
+			case "uedit":{
+				RequestDispatcher rd=request.getRequestDispatcher("editform.jsp");
+				rd.forward(request, response);
+				break;
+			}
+			case "auth":{
+//				request.setAttribute("msg", "Logged in successfull");
+				RequestDispatcher rd=request.getRequestDispatcher("login.jsp");
+				rd.forward(request, response);
+				break;
+			}
+			case "logout":{
+				HttpSession session=request.getSession();
+				session.removeAttribute("user");
+				response.sendRedirect("/Electricity_Bill_Management/");
+				break;
+			}
+			case "invoice":{
+				if(customer_id!=null)
+				{
+					int uid=Integer.parseInt(customer_id);
+					Electricity obj=db.SelectById(uid);
+					if(obj.getCustomer_id()!=0)
+					{
+						request.setAttribute("data", obj);
+						RequestDispatcher rs=request.getRequestDispatcher("invoice.jsp");
+						rs.forward(request, response);
+						break;
+					}
+					else
+					{
+						request.setAttribute("msg", "No result found");
+						RequestDispatcher rd=request.getRequestDispatcher("error.jsp");
+						rd.forward(request, response);
+					}
+				}
+				else 
+				{
+					request.setAttribute("msg", "Invalid Id or Missing Id");
+					RequestDispatcher rd=request.getRequestDispatcher("error.jsp");
+					rd.forward(request, response);
+				}
+				break;
+			}
+			
+			case "srch":{
+				String srchdata=request.getParameter("srchdata");
+				List<Electricity> arr=db.srch(srchdata);
+				request.setAttribute("stdata",arr);
+				RequestDispatcher rd=request.getRequestDispatcher("List.jsp");
+				rd.forward(request, response);
+				break;
+			}
+			default:
+				request.setAttribute("msg", "Invalid Action");
+				RequestDispatcher rd=request.getRequestDispatcher("error.jsp");
+				rd.forward(request, response);
+			}
+		}else {
+			request.setAttribute("msg", "Action Missing");
+			RequestDispatcher rd=request.getRequestDispatcher("error.jsp");
+			rd.forward(request, response);
+		}
+		
+	}
+
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String action=request.getParameter("action");
+		String customer_id=request.getParameter("customer_id");
+		System.out.println(customer_id);
+		if(action!=null) {
+			switch (action) {
+			case "form": {
+				String name=request.getParameter("uname");
+				String email=request.getParameter("uemail");
+				String contact=request.getParameter("ucontact");
+				String address=request.getParameter("uaddress");
+				String password=request.getParameter("upassword");
+				System.out.println("Name:"+name+" Email: "+email+" Password: "+password);
+				
+				Electricity obj=new Electricity(name, email, contact, address, password);
+				int res= db.add(obj);
+				if(res>0) {
+					System.out.println("Data Inserted Successfully :)");
+					System.out.println(db.getallElectricity());
+					
+				}else {
+					System.out.println("Data Not Insterd!!!");
+				}
+				response.sendRedirect("/Electricity_Bill_Management/");
+				break;
+			}
+			
+			case "edit":{
+				if(customer_id!=null) {
+					String name=request.getParameter("uname");
+					String email=request.getParameter("uemail");
+					String contact=request.getParameter("ucontact");
+					String address=request.getParameter("uaddress");
+					String password=request.getParameter("upassword");
+					int uid=Integer.parseInt(customer_id);
+					System.out.println("Id:"+uid+"Name:"+name+" Email: "+email+" Password: "+password);
+					Electricity obj=new Electricity(uid, name, email, contact, address, password);
+					int res=db.updateElectricity(obj);
+					response.sendRedirect("elec?action=getdata");
+				}
+				else
+				{
+						request.setAttribute("msg", "Invalid Id or Missing Id");
+						RequestDispatcher rd=request.getRequestDispatcher("error.jsp");
+						rd.forward(request, response);
+				}
+				break;
+			}
+			case "uedit":{
+				String name=request.getParameter("uname");
+				String email=request.getParameter("uemail");
+				String contact=request.getParameter("ucontact");
+				String address=request.getParameter("uaddress");
+				String password=request.getParameter("upassword");
+				int uid=Integer.parseInt(request.getParameter("customer_id"));
+//				System.out.println("Id:"+uid+"Name:"+name+" Email: "+email+" Password: "+password);
+				Electricity obj=new Electricity(uid, name, email, contact, address, password);
+				int res=db.updateElectricity(obj);
+				response.sendRedirect("/Electricity_Bill_Management/");
+				break;
+			}
+			
+			
+			case "auth":{
+				String email=request.getParameter("email");
+				String password=request.getParameter("password");
+				Electricity obj=db.auth(email, password);
+				if(obj.getEmail()!=null)
+				{
+					HttpSession session=request.getSession();
+					session.setAttribute("user", obj);
+					request.setAttribute("msg", "logged in successfull");
+					RequestDispatcher rd=request.getRequestDispatcher("index.jsp");
+					rd.forward(request, response);
+				}
+				else {
+					request.setAttribute("msg", "invalid email or password please enter correct email or passowrd");
+					RequestDispatcher rd=request.getRequestDispatcher("login.jsp");
+					rd.forward(request, response);
+				}
+				break;
+			}
+			default:
+				request.setAttribute("msg", "Invalid Id or Missing Id");
+				RequestDispatcher rd=request.getRequestDispatcher("error.jsp");
+				rd.forward(request, response);
+			}
+		}
+		
+		
+	}
+
+}
+
+
+//Pages Billform
+
+<%
+	Electricity obj=(Electricity)request.getAttribute("data");
+%>
+<form method="post" >
+	<table>
+		<tr>
+			<th>Name: </th>
+			<td><%=obj.getName() %></td>
+		</tr>
+		<tr>
+			<th>Email: </th>
+			<td><%=obj.getEmail() %></td>
+		</tr>
+		<tr>
+		<th>Contact</th>
+		<td><%=obj.getContact() %></td>
+		</tr>
+		<tr>
+			<th>Address: </th>
+			<td><%=obj.getAddress() %></td>
+		</tr>
+		
+		
+		</table>
+		<table>
+		<tr> 
+		<th>Enter Customer id</th>
+		<td><input type="text" name="ucustomer_id"><button>search</button></td>
+		</tr>		
+		</table>
+
+
+
+//editform
+
+<%
+	Electricity obj=(Electricity)request.getAttribute("data");
+	Electricity obju=(Electricity)session.getAttribute("user");
+%>
+<h1> Enter your updated details</h1>
+<%if(obj!=null){ %>
+<form method="post" >
+	
+	<table border="2px">
+		<tr>
+			<th>Name</th>
+			<td><input type="text" name="uname" value="<%=obj.getName() %>"></td>
+		</tr>
+		<tr>
+			<th>Email</th>
+			<td><input type="email" name="uemail"  value="<%=obj.getEmail() %>"></td>
+		</tr>
+		<tr>
+			<th>Contact</th>
+			<td><input type="text" name="ucontact"  value="<%=obj.getContact() %>"></td>
+		</tr>
+		<tr>
+			<th>Address</th>
+			<td><input type="text" name="uaddress"  value="<%=obj.getAddress() %>"></td>
+		</tr>
+		<tr>
+			<th>Password</th>
+			<td><input type="password" name="upassword" value="<%=obj.getPassword() %>"></td>
+		</tr>
+		
+		<tr>
+			<td colspan="2px" ><button type="submit">submit</button></td>
+		</tr>
+		
+	</table>
+	
+</form>
+<%}else{ %>
+<form method="post" >
+	
+	<table border="2px">
+		<tr>
+			<th>Name</th>
+			<td><input type="text" name="uname" value="<%=obju.getName() %>"></td>
+		</tr>
+		<tr>
+			<th>Email</th>
+			<td><input type="email" name="uemail"  value="<%=obju.getEmail() %>"></td>
+		</tr>
+		<tr>
+			<th>Contact</th>
+			<td><input type="text" name="ucontact"  value="<%=obju.getContact()%>"></td>
+		</tr>
+		<tr>
+			<th>Address</th>
+			<td><input type="text" name="uaddress"  value="<%=obju.getAddress() %>"></td>
+		</tr>
+		<tr>
+			<th>Password</th>
+			<td><input type="password" name="upassword" value="<%=obju.getPassword() %>"></td>
+		</tr>
+		<input type="hidden" name="customer_id" value="<%= obju.getCustomer_id()%>">
+		<tr>
+			<td colspan="2px" ><button type="submit">submit</button></td>
+		</tr>
+		
+	</table>
+	
+</form>
+<%} %>
+
+
+//error 
+
+<%
+String msg=(String) request.getAttribute("msg");
+%>
+<h1>Error Occured</h1>
+<%
+if(msg!=null){
+%>
+<h2><%=msg %></h2>
+<%
+}else{
+%>
+<h2>Something Went Wrong</h2>
+<%
+} 
+%>
+
+
+//form.html
+
+<form method="post" >
+	
+	<table>
+		<tr>
+			<th>Name</th>
+			<td><input type="text" name="uname" placeholder="Please enter your name"></td>
+		</tr>
+		<tr>
+			<th>Email</th>
+			<td><input type="email" name="uemail" placeholder="please enter email" required></td>
+		</tr>
+		<tr>
+			<th>Contact</th>
+			<td><input type="text" name="ucontact" placeholder="please enter your Contact" required></td>
+		</tr>
+		<tr>
+			<th>Address</th>
+			<td><input type="text" name="uaddress" placeholder="please enter your address" required></td>
+		</tr>
+		<tr>
+			<th>Password</th>
+			<td><input type="password" name="upassword" placeholder="please enter your password" required></td>
+		</tr>
+		
+		<tr>
+			<td colspan="2px" ><button type="submit">submit</button></td>
+		</tr>
+		
+	</table>
+	
+</form>
+
+//index
+
+<%Electricity data=(Electricity)session.getAttribute("user");
+String name=null;
+int is_admin=0;
+if(data instanceof Electricity){
+	name=data.getName();
+	is_admin=data.getIs_admin();
+}			
+%>
+<% if (name!=null && is_admin==1){ %>
+<h1>Welcome to Home Page <%= name %></h1>
+<h2><a href="elec?action=getdata">  Details</a></h2>
+<h2>
+	<a href="elec?action=uedit">Edit Profile</a>
+	</h2>
+	<h2><a href="elec?action=Billform&customer_id=<%= data.getCustomer_id()%>">Bill info</a></h2>
+<h2><a href="elec?action=logout">Logout</a></h2>
+<%}else if (name!=null && is_admin==0){ %>
+<h1>Welcome to Home Page <%= name %></h1>
+
+<h2>
+	<a href="elec?action=uedit">Edit Profile</a>
+	</h2>
+<h2><a href="elec?action=logout">Logout</a></h2>
+<%}else{ %>
+<h1>Welcome to Home Page</h1>
+
+<h2><a href="elec?action=form">Sign-up</a></h2>
+<h2><a href="elec?action=auth">Sign-in</a></h2>
+<%} %>
+
+
+<% String msg=(String)request.getAttribute("msg");%>
+<%if(msg!=null){ %>
+<h1><%= msg %></h1>
+<%} %>
+
+//invoice
+
+<%
+	Electricity obj=(Electricity)request.getAttribute("data");
+%>
+<form method="post" >
+	<table>
+		<tr>
+			<th>Name: </th>
+			<td><%=obj.getName() %></td>
+		</tr>
+		<tr>
+			<th>Email: </th>
+			<td><%=obj.getEmail() %></td>
+		</tr>
+		<tr>
+		<th>Contact</th>
+		<td><%=obj.getContact() %></td>
+		</tr>
+		<tr>
+			<th>Address: </th>
+			<td><%=obj.getAddress() %></td>
+		</tr>
+		
+		
+		</table>
+		<table>
+		<tr> 
+		<th>Enter Customer id</th>
+		<td><input type="text" name="ucustomer_id"><button>search</button></td>
+		</tr>		
+		</table>
+	
+</form>
+
+//List
+
+<%
+	List<Electricity> el=(List<Electricity>)request.getAttribute("stdata");
+	%>
+	<h1>all employee details</h1>
+	<form action="/Electricity_Bill_Management/elec">
+	<input type="hidden" name="action" value="srch">
+	<div>
+	<input type="text" name="srchdata">	<button>Search</button>
+	</div>
+	</form>
+	
+	<table cellspacing="10" border="2">
+	
+	<tr>
+	<th>Id</th>
+	<th>Name</th>
+	<th>Email</th>
+	<th>Contact</th>
+	<th>Address</th>
+	<th>Password</th>
+	<th colspan="3">Action</th>
+	</tr>
+	<%
+	for(Electricity e:el){
+	%>
+	<tr>
+	<td><%= e.getCustomer_id() %></td>
+	<td><%= e.getName() %></td>
+	<td><%= e.getEmail() %></td>
+	<td><%= e.getContact() %></td>
+	<td><%= e.getAddress()%></td>
+	<td><%= e.getPassword() %></td>
+	<td><a href="elec?action=edit&customer_id=<%=e.getCustomer_id() %>">Edit</a></td>
+	<td><a href="elec?action=delete&customer_id=<%= e.getCustomer_id()%>">Delete</a></td>
+	<td><a href="elec?action=invoice&customer_id=<%= e.getCustomer_id()%>">invoice</a></td>
+	</tr>
+	<% 
+	}%>
+	</table>
+
+//login
+
+<h1>Welcome to Login Page</h1>
+<% String msg=(String)request.getAttribute("msg");%>
+<%if(msg!=null){ %>
+<h1><%= msg %></h1>
+<%} %>
+<form method="post">
+	<table>
+		<tr>
+			<td>Email    :</td>
+			<td><input type="email" name="email"></td>
+		</tr>
+		<tr>
+			<td>Password :</td>
+			<td><input type="password" name="password"></td>
+		</tr>
+		<tr>
+			<td><button type="submit">submit</button></td>
+		</tr>
+	</table>
+</form>
